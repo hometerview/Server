@@ -4,7 +4,8 @@ import com.ftw.hometerview.core.domain.ResponseType;
 
 public class NotFoundException extends BaseException {
 
-  public NotFoundException(ResponseType responseType) {
-    super(responseType);
-  }
+    public NotFoundException(ResponseType responseType) {
+        super(responseType);
+    }
+
 }

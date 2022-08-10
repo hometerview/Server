@@ -38,7 +38,7 @@ public class SwaggerConfig {
     private ApiInfo apiInfo() {
         return new ApiInfoBuilder()
             .title("Hometerview API Documentation")
-            .description("세입자들 : 홈터뷰 프로젝트 API 문서")
+            .description("세입자들 : 집터뷰 프로젝트 API 문서")
             .version("0.0.1")
             .build();
     }
@@ -54,11 +54,10 @@ public class SwaggerConfig {
     }
 
     private List<SecurityReference> defaultAuth() {
-        AuthorizationScope authorizationScope = new AuthorizationScope("global", "accessEverything");
+        AuthorizationScope authorizationScope = new AuthorizationScope("global",
+            "accessEverything");
         AuthorizationScope[] authorizationScopes = new AuthorizationScope[]{authorizationScope};
         return List.of(new SecurityReference(Constants.AUTH_HEADER_KEY, authorizationScopes));
     }
-
-
 
 }

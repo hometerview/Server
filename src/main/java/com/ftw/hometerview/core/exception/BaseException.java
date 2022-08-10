@@ -6,9 +6,9 @@ import lombok.Getter;
 @Getter
 public class BaseException extends RuntimeException {
 
-  private final ResponseType responseType;
+    private final ResponseType responseType;
 
-  public BaseException(ResponseType responseType) {
-    this.responseType = responseType;
-  }
+    public BaseException(ResponseType responseType) {
+        this.responseType = responseType;
+    }
 }

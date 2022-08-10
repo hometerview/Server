@@ -53,16 +53,18 @@ public class ExceptionControllerAdvice {
 
     @ResponseStatus(HttpStatus.BAD_REQUEST)
     @ExceptionHandler(MethodArgumentNotValidException.class)
-    public <T> ResponseEntity<T> handleMethodArgumentNotValidException(MethodArgumentNotValidException exception) {
+    public <T> ResponseEntity<T> handleMethodArgumentNotValidException(
+        MethodArgumentNotValidException exception) {
         String message = exception.getFieldErrors().stream()
-                .map(e -> e.getField() + " - " + e.getDefaultMessage())
-                .collect(Collectors.joining(", "));
+            .map(e -> e.getField() + " - " + e.getDefaultMessage())
+            .collect(Collectors.joining(", "));
         printLog(exception.getClass().getName(), message);
         return ResponseEntity.failureResponse(ResponseType.ARGUMENT_NOT_VALID, message);
     }
 
     private void printLog(BaseException exception) {
-        log.error(String.format("[Error] %s: %s", exception.getClass().getName(), exception.getResponseType().getMessage()));
+        log.error(String.format("[Error] %s: %s", exception.getClass().getName(),
+            exception.getResponseType().getMessage()));
     }
 
     private void printLog(String exceptionName, String message) {
