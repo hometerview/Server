@@ -17,19 +17,17 @@ import org.springframework.web.servlet.HandlerInterceptor;
 @Component
 public class AuthorizationInterceptor implements HandlerInterceptor {
 
-    private final AuthorizationContextHolder authContext = new AuthorizationContextHolder();
-
     @Override
     public boolean preHandle(HttpServletRequest request, HttpServletResponse response,
         Object handler) {
         if (isNonAuthorize(handler)) {
             return true;
         }
-        String userId = request.getHeader(Constants.AUTH_HEADER_KEY);
-        if (!StringUtils.hasText(userId)) {
+        String memberId = request.getHeader(Constants.AUTH_HEADER_KEY);
+        if (!StringUtils.hasText(memberId)) {
             throw new UnauthorizedException(ResponseType.REQUEST_UNAUTHORIZED);
         }
-        authContext.setContext(userId);
+        AuthorizationContextHolder.setContext(AuthContent.builder().memberId(memberId).build());
         return true;
     }
 
@@ -44,7 +42,7 @@ public class AuthorizationInterceptor implements HandlerInterceptor {
         Object handler,
         @Nullable Exception ex) {
         try {
-            authContext.clearContext();
+            AuthorizationContextHolder.clearContext();
         } catch (Exception e) {
             log.error(String.format("[AFTER-COMPLETION] fail to clear auth context >> %s",
                 ex.getMessage()));    // TODO: @Retry

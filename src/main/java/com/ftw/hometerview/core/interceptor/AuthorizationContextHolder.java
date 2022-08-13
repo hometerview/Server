@@ -6,21 +6,21 @@ import org.springframework.util.Assert;
 
 public class AuthorizationContextHolder {
 
-    public static ThreadLocal<String> contextHolder = new ThreadLocal<>();
+    public static ThreadLocal<AuthContent> contextHolder = new ThreadLocal<>();
 
-    public void clearContext() {
+    public static void clearContext() {
         contextHolder.remove();
     }
 
-    public String getContext() {
-        String ctx = contextHolder.get();
+    public static AuthContent getContext() {
+        AuthContent ctx = contextHolder.get();
         if (ctx == null) {
             throw new BadRequestException(ResponseType.REQUEST_UNAUTHORIZED);
         }
         return ctx;
     }
 
-    public void setContext(String context) {
+    public static void setContext(AuthContent context) {
         Assert.notNull(context, "Only non-null Context instances are permitted");
         contextHolder.set(context);
     }
