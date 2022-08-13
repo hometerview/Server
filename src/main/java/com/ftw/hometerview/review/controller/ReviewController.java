@@ -1,5 +1,7 @@
 package com.ftw.hometerview.review.controller;
 
+import static com.ftw.hometerview.core.util.Constants.DEFAULT_PAGE_SIZE;
+
 import com.ftw.hometerview.core.annotation.NonAuthorized;
 import com.ftw.hometerview.core.domain.ResponseEntity;
 import com.ftw.hometerview.review.controller.dto.ReviewDto;
@@ -7,6 +9,8 @@ import com.ftw.hometerview.review.service.ReviewService;
 import io.swagger.v3.oas.annotations.Operation;
 import java.util.List;
 import lombok.RequiredArgsConstructor;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.web.PageableDefault;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -30,23 +34,26 @@ public class ReviewController {
     @GetMapping()
     public ResponseEntity<List<ReviewDto.Meta>> getMainReviews(
         @RequestParam(required = false) String buildingId,
-        @RequestParam(required = false) String cityId) {
-        var reviewList = this.reviewService.getHomeReviewList(buildingId, cityId);
+        @RequestParam(required = false) String cityId,
+        @PageableDefault(size = DEFAULT_PAGE_SIZE) Pageable pageable) {
+        var reviewList = this.reviewService.getHomeReviewList(buildingId, cityId, pageable);
         return ResponseEntity.successResponse(reviewList);
     }
 
     @Operation(summary = "건물 리뷰 리스트 조회")
     @GetMapping("/detail")
     public ResponseEntity<List<ReviewDto.Detail>> getBuildingReviews(
-        @RequestParam String buildingId) {
-        var reviewList = this.reviewService.getBuildingReviewList(buildingId);
+        @RequestParam String buildingId,
+        @PageableDefault(size = DEFAULT_PAGE_SIZE) Pageable pageable) {
+        var reviewList = this.reviewService.getBuildingReviewList(buildingId, pageable);
         return ResponseEntity.successResponse(reviewList);
     }
 
     @Operation(summary = "내가 쓴 리뷰 리스트 조회")
     @GetMapping("/my")
-    public ResponseEntity<List<ReviewDto.Detail>> getMyReviews() {
-        var reviewList = this.reviewService.getMyReviewList();
+    public ResponseEntity<List<ReviewDto.Detail>> getMyReviews(
+        @PageableDefault(size = DEFAULT_PAGE_SIZE) Pageable pageable) {
+        var reviewList = this.reviewService.getMyReviewList(pageable);
         return ResponseEntity.successResponse(reviewList);
     }
 

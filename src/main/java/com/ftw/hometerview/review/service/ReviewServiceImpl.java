@@ -15,6 +15,7 @@ import com.ftw.hometerview.review.repository.ReviewRepository;
 import java.util.Collections;
 import java.util.List;
 import lombok.RequiredArgsConstructor;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
 @RequiredArgsConstructor
@@ -24,8 +25,8 @@ public class ReviewServiceImpl implements ReviewService {
     private final ReviewRepository reviewRepository;
 
     @Override
-    public List<Meta> getHomeReviewList(String buildingId, String cityId) {
-        List<Review> reviews = this.reviewRepository.getReviewByBuildingId(buildingId);
+    public List<Meta> getHomeReviewList(String buildingId, String cityId, Pageable pageable) {
+        List<Review> reviews = this.reviewRepository.getReviewByBuildingId(buildingId, pageable);
         List<String> buildingIds = Collections.emptyList();
         // TODO:: buildingservice.getbuildingIds(cityId);
         reviews = reviews.stream()
@@ -36,15 +37,16 @@ public class ReviewServiceImpl implements ReviewService {
     }
 
     @Override
-    public List<Detail> getBuildingReviewList(String buildingId) {
-        List<Review> reviews = this.reviewRepository.getReviewByBuildingId(buildingId);
+    public List<Detail> getBuildingReviewList(String buildingId, Pageable pageable) {
+        List<Review> reviews = this.reviewRepository.getReviewByBuildingId(buildingId, pageable);
         List<ReviewDto.Detail> response = reviews.stream().map(Review::toDetail).toList();
         return response;
     }
 
     @Override
-    public List<Detail> getMyReviewList() {
-        List<Review> reviews = this.reviewRepository.getReviewByMemberId(getCurrentMemberId());
+    public List<Detail> getMyReviewList(Pageable pageable) {
+        List<Review> reviews = this.reviewRepository.getReviewByMemberId(getCurrentMemberId(),
+            pageable);
         List<ReviewDto.Detail> response = reviews.stream().map(Review::toDetail).toList();
         return response;
     }
