@@ -6,4 +6,6 @@ public interface ReviewService {
 
     void registerReview(ReviewDto.Create request);
 
+    void modifyReviewList(ReviewDto.Modify req);
+
 }

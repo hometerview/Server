@@ -1,6 +1,7 @@
 package com.ftw.hometerview.review.domain;
 
 import com.ftw.hometerview.core.domain.AbstractDocument;
+import com.ftw.hometerview.review.controller.dto.ReviewDto;
 import java.util.List;
 import lombok.AccessLevel;
 import lombok.Builder;
@@ -39,6 +40,17 @@ public class Review extends AbstractDocument {
         String monthly;     // 월세
         String deposit;     //전세
         String maintainFee; // 관리비
+    }
+
+    public Review modify(ReviewDto.Modify req) {
+        this.companyId = req.getCompanyId();
+        this.rating = req.getRating();
+        this.advantage = req.getAdvantage();
+        this.disadvantage = req.getDisadvantage();
+        this.period = req.getPeriod();
+        this.price = req.getPrice();
+        return this;
+
     }
 
     public Review setCertification(List<String> cert) {

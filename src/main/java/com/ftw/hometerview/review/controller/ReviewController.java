@@ -7,6 +7,7 @@ import io.swagger.v3.oas.annotations.Operation;
 import lombok.RequiredArgsConstructor;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.PatchMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
@@ -18,10 +19,18 @@ public class ReviewController {
 
     private final ReviewService reviewService;
 
+
     @Operation(summary = "리뷰 등록")
     @PostMapping
     public ResponseEntity<Void> registerReview(@Validated @RequestBody ReviewDto.Create request) {
         this.reviewService.registerReview(request);
+        return ResponseEntity.successResponse();
+    }
+
+    @Operation(summary = "리뷰 수정")
+    @PatchMapping
+    public ResponseEntity<Void> modifyReview(@Validated @RequestBody ReviewDto.Modify req) {
+        this.reviewService.modifyReviewList(req);
         return ResponseEntity.successResponse();
     }
 
