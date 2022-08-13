@@ -58,4 +58,22 @@ public class Review extends AbstractDocument {
         return this;
     }
 
+    public static ReviewDto.Detail toDetail(Review review) {
+        return ReviewDto.Detail.builder()
+            .review(review)
+            .isBookmarked(null)
+            .isLiked(null)
+            .build();
+    }
+
+    public static ReviewDto.Meta toMeta(Review review) {
+        return ReviewDto.Meta.builder()
+            .reviewId(String.valueOf(review.getId()))
+            .buildingId(review.getBuildingId())
+            .rating(review.getRating())
+            .advantage(review.getAdvantage())
+            .disadvantage(review.getDisadvantage())
+            .build();
+    }
+
 }

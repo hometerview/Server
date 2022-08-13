@@ -5,7 +5,10 @@ import static com.ftw.hometerview.core.interceptor.AuthUtil.getCurrentMemberId;
 import com.ftw.hometerview.core.domain.ResponseType;
 import com.ftw.hometerview.core.exception.BadRequestException;
 import com.ftw.hometerview.core.exception.NotFoundException;
+import com.ftw.hometerview.review.controller.dto.ReviewDto;
 import com.ftw.hometerview.review.controller.dto.ReviewDto.Create;
+import com.ftw.hometerview.review.controller.dto.ReviewDto.Detail;
+import com.ftw.hometerview.review.controller.dto.ReviewDto.Meta;
 import com.ftw.hometerview.review.controller.dto.ReviewDto.Modify;
 import com.ftw.hometerview.review.domain.Review;
 import com.ftw.hometerview.review.repository.ReviewRepository;
@@ -21,12 +24,37 @@ public class ReviewServiceImpl implements ReviewService {
     private final ReviewRepository reviewRepository;
 
     @Override
+    public List<Meta> getHomeReviewList(String buildingId, String cityId) {
+        List<Review> reviews = this.reviewRepository.getReviewByBuildingId(buildingId);
+        List<String> buildingIds = Collections.emptyList();
+        // TODO:: buildingservice.getbuildingIds(cityId);
+        reviews = reviews.stream()
+            .filter(review -> buildingIds.contains(review.getBuildingId()))
+            .toList();
+        List<ReviewDto.Meta> response = reviews.stream().map(Review::toMeta).toList();
+        return response;
+    }
+
+    @Override
+    public List<Detail> getBuildingReviewList(String buildingId) {
+        List<Review> reviews = this.reviewRepository.getReviewByBuildingId(buildingId);
+        List<ReviewDto.Detail> response = reviews.stream().map(Review::toDetail).toList();
+        return response;
+    }
+
+    @Override
+    public List<Detail> getMyReviewList() {
+        List<Review> reviews = this.reviewRepository.getReviewByMemberId(getCurrentMemberId());
+        List<ReviewDto.Detail> response = reviews.stream().map(Review::toDetail).toList();
+        return response;
+    }
+
+    @Override
     public void registerReview(Create req) {
         Review review = req.toReview();
         setCertification(review);
         this.reviewRepository.save(review);
     }
-
 
     @Override
     public void modifyReviewList(Modify req) {
@@ -58,4 +86,5 @@ public class ReviewServiceImpl implements ReviewService {
         }
         return review;
     }
+
 }

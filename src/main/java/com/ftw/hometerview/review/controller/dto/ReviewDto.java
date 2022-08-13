@@ -7,6 +7,7 @@ import com.ftw.hometerview.review.domain.Review.Price;
 import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Size;
+import lombok.Builder;
 import lombok.Getter;
 
 
@@ -41,6 +42,7 @@ public class ReviewDto {
                 .bookmark_count(0)
                 .build();
         }
+
     }
 
     @Getter
@@ -59,6 +61,28 @@ public class ReviewDto {
         @Size(min = 30, max = 900)
         private String disadvantage;
         private Price price;
+    }
+
+    @Getter
+    @Builder
+    public static class Meta {
+
+        private String reviewId;
+        private String buildingId;
+        private Integer rating;
+        private String advantage;
+        private String disadvantage;
+
+    }
+
+    @Getter
+    @Builder
+    public static class Detail {
+
+        private Review review;
+        private Boolean isLiked;
+        private Boolean isBookmarked;
+
     }
 
 }
