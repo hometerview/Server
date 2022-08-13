@@ -5,11 +5,8 @@ import static com.ftw.hometerview.core.interceptor.AuthUtil.getCurrentMemberId;
 import com.ftw.hometerview.core.domain.ResponseType;
 import com.ftw.hometerview.core.exception.BadRequestException;
 import com.ftw.hometerview.core.exception.NotFoundException;
-<<<<<<< HEAD
 import com.ftw.hometerview.review.controller.dto.ReviewDto.Create;
-=======
 import com.ftw.hometerview.review.controller.dto.ReviewDto.Modify;
->>>>>>> feature/review-modify
 import com.ftw.hometerview.review.domain.Review;
 import com.ftw.hometerview.review.repository.ReviewRepository;
 import java.util.Collections;
