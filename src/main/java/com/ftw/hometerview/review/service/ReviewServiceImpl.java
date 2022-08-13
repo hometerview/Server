@@ -27,6 +27,8 @@ public class ReviewServiceImpl implements ReviewService {
         this.reviewRepository.save(review);
     }
 
+
+    @Override
     public void modifyReviewList(Modify req) {
         Review review = getReviewWithAuthCheck(req.getReviewId());
         review.modify(req);
@@ -41,6 +43,12 @@ public class ReviewServiceImpl implements ReviewService {
         return review;
     }
 
+    @Override
+    public void deleteReview(String reviewId) {
+        Review review = getReviewWithAuthCheck(reviewId);
+        this.reviewRepository.delete(review);
+    }
+
     private Review getReviewWithAuthCheck(String reviewId) {
         Review review = this.reviewRepository.findById(reviewId)
             .orElseThrow(() -> new NotFoundException(
@@ -50,5 +58,4 @@ public class ReviewServiceImpl implements ReviewService {
         }
         return review;
     }
-
 }

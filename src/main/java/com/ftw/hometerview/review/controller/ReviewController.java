@@ -8,6 +8,10 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PatchMapping;
+import org.springframework.web.bind.annotation.DeleteMapping;
+import org.springframework.web.bind.annotation.PatchMapping;
+import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
@@ -31,6 +35,13 @@ public class ReviewController {
     @PatchMapping
     public ResponseEntity<Void> modifyReview(@Validated @RequestBody ReviewDto.Modify req) {
         this.reviewService.modifyReviewList(req);
+        return ResponseEntity.successResponse();
+    }
+
+    @Operation(summary = "리뷰 삭제")
+    @DeleteMapping("/{reviewId}")
+    public ResponseEntity<Void> deleteReview(@PathVariable String reviewId) {
+        this.reviewService.deleteReview(reviewId);
         return ResponseEntity.successResponse();
     }
 

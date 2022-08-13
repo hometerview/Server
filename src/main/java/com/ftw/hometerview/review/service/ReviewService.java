@@ -8,4 +8,6 @@ public interface ReviewService {
 
     void modifyReviewList(ReviewDto.Modify req);
 
+    void deleteReview(String reviewId);
+
 }
