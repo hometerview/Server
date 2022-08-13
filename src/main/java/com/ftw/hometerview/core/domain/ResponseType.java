@@ -31,7 +31,11 @@ public enum ResponseType {
 
     // MEMBER
     USER_NOT_EXIST_ID("ME01", "존재하지 않는 사용자입니다."),
-    USER_NOT_MATCH_AUTH_TYPE("ME02", "가입 인증 유형이 일치하지 않습니다.");
+    USER_NOT_MATCH_AUTH_TYPE("ME02", "가입 인증 유형이 일치하지 않습니다."),
+
+    // REVIEW
+    REVIEW_NOT_EXIST("RE01", "존재하지 않는 리뷰입니다."),
+    REVIEW_NOT_AUTHOR("RE02", "작성자가 아닙니다.");
 
     private final String code;
     private final String message;
