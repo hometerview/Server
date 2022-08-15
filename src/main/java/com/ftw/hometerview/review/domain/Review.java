@@ -31,8 +31,8 @@ public class Review extends AbstractDocument {
     String period;
     Price price;
     List<String> certification;
-    Integer like_count;
-    Integer bookmark_count;
+    Integer likeCount;
+    Integer bookmarkCount;
 
     @Getter
     public static class Price {
@@ -58,21 +58,22 @@ public class Review extends AbstractDocument {
         return this;
     }
 
-    public static ReviewDto.Detail toDetail(Review review) {
+    public ReviewDto.Detail toDetail() {
         return ReviewDto.Detail.builder()
-            .review(review)
+            .review(this)
             .isBookmarked(null)
             .isLiked(null)
             .build();
     }
 
-    public static ReviewDto.Meta toMeta(Review review) {
+
+    public ReviewDto.Meta toMeta() {
         return ReviewDto.Meta.builder()
-            .reviewId(String.valueOf(review.getId()))
-            .buildingId(review.getBuildingId())
-            .rating(review.getRating())
-            .advantage(review.getAdvantage())
-            .disadvantage(review.getDisadvantage())
+            .reviewId(String.valueOf(this.getId()))
+            .buildingId(this.getBuildingId())
+            .rating(this.getRating())
+            .advantage(this.getAdvantage())
+            .disadvantage(this.getDisadvantage())
             .build();
     }
 

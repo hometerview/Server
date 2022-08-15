@@ -7,7 +7,7 @@ import org.springframework.data.mongodb.repository.MongoRepository;
 import org.springframework.stereotype.Repository;
 
 @Repository
-public interface ReviewRepository extends MongoRepository<Review, String>, ReviewRepositoryCustom {
+public interface ReviewRepository extends MongoRepository<Review, String> {
 
     List<Review> getReviewByBuildingId(String buildingId, Pageable pageable);
 

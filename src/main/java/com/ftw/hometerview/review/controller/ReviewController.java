@@ -1,5 +1,6 @@
 package com.ftw.hometerview.review.controller;
 
+import static com.ftw.hometerview.core.util.Constants.DEFAULT_KEYWORD;
 import static com.ftw.hometerview.core.util.Constants.DEFAULT_PAGE_SIZE;
 
 import com.ftw.hometerview.core.annotation.NonAuthorized;
@@ -31,10 +32,10 @@ public class ReviewController {
 
     @Operation(summary = "홈 지역별 리뷰 리스트 조회")
     @NonAuthorized
-    @GetMapping()
+    @GetMapping
     public ResponseEntity<List<ReviewDto.Meta>> getMainReviews(
-        @RequestParam(required = false) String buildingId,
-        @RequestParam(required = false) String cityId,
+        @RequestParam(required = false, defaultValue = DEFAULT_KEYWORD) String buildingId,
+        @RequestParam(required = false, defaultValue = DEFAULT_KEYWORD) String cityId,
         @PageableDefault(size = DEFAULT_PAGE_SIZE) Pageable pageable) {
         var reviewList = this.reviewService.getHomeReviewList(buildingId, cityId, pageable);
         return ResponseEntity.successResponse(reviewList);
