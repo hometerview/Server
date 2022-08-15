@@ -60,8 +60,8 @@ public class ReviewController {
 
     @Operation(summary = "리뷰 등록")
     @PostMapping
-    public ResponseEntity<Void> registerReview(@Validated @RequestBody ReviewDto.Create request) {
-        this.reviewService.registerReview(request);
+    public ResponseEntity<Void> registerReview(@Validated @RequestBody ReviewDto.Create req) {
+        this.reviewService.registerReview(req);
         return ResponseEntity.successResponse();
     }
 

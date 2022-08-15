@@ -12,7 +12,7 @@ public interface ReviewService {
 
     List<ReviewDto.Detail> getMyReviewList(Pageable pageable);
 
-    void registerReview(ReviewDto.Create request);
+    void registerReview(ReviewDto.Create req);
 
     void modifyReviewList(ReviewDto.Modify req);
 
