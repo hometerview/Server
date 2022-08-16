@@ -38,7 +38,7 @@ public class Review extends AbstractDocument {
     public static class Price {
 
         String monthly;     // 월세
-        String deposit;     //전세
+        String deposit;     // 전세
         String maintainFee; // 관리비
     }
 
