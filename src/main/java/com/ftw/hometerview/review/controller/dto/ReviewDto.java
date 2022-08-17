@@ -38,8 +38,8 @@ public class ReviewDto {
                 .disadvantage(this.disadvantage)
                 .period(this.period)
                 .price(this.price)
-                .like_count(0)
-                .bookmark_count(0)
+                .likeCount(0)
+                .bookmarkCount(0)
                 .build();
         }
 
