@@ -20,6 +20,7 @@ public class AuthorizationInterceptor implements HandlerInterceptor {
     @Override
     public boolean preHandle(HttpServletRequest request, HttpServletResponse response,
         Object handler) {
+        log.info("[preHandler] request uri : {}", request.getRequestURI());
         if (isNonAuthorize(handler)) {
             return true;
         }
@@ -27,6 +28,7 @@ public class AuthorizationInterceptor implements HandlerInterceptor {
         if (!StringUtils.hasText(memberId)) {
             throw new UnauthorizedException(ResponseType.REQUEST_UNAUTHORIZED);
         }
+        log.info("[HEADER] Member No: {}", memberId);
         AuthorizationContextHolder.setContext(AuthContent.builder().memberId(memberId).build());
         return true;
     }
@@ -45,7 +47,7 @@ public class AuthorizationInterceptor implements HandlerInterceptor {
             AuthorizationContextHolder.clearContext();
         } catch (Exception e) {
             log.error(String.format("[AFTER-COMPLETION] fail to clear auth context >> %s",
-                ex.getMessage()));    // TODO: @Retry
+                e.getMessage()));    // TODO: @Retry
         }
     }
 }
