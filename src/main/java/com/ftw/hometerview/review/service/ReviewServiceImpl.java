@@ -66,11 +66,10 @@ public class ReviewServiceImpl implements ReviewService {
         this.reviewRepository.save(review);
     }
 
-    private Review setCertification(Review review) {
+    private void setCertification(Review review) {
         // TODO:: member service, feign... param: getCurrentMemberId, response: String
         List<String> cert = Collections.emptyList();
         review.setCertification(cert);
-        return review;
     }
 
     @Override

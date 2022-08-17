@@ -42,20 +42,18 @@ public class Review extends AbstractDocument {
         String maintainFee; // 관리비
     }
 
-    public Review modify(ReviewDto.Modify req) {
+    public void modify(ReviewDto.Modify req) {
         this.companyId = req.getCompanyId();
         this.rating = req.getRating();
         this.advantage = req.getAdvantage();
         this.disadvantage = req.getDisadvantage();
         this.period = req.getPeriod();
         this.price = req.getPrice();
-        return this;
 
     }
 
-    public Review setCertification(List<String> cert) {
+    public void setCertification(List<String> cert) {
         this.certification = cert;
-        return this;
     }
 
     public ReviewDto.Detail toDetail() {
