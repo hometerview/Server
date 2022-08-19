@@ -1,36 +1,27 @@
 package com.ftw.hometerview.place.controller.dto;
 
-import com.ftw.hometerview.place.domain.Company;
-import javax.validation.constraints.NotBlank;
-import javax.validation.constraints.Pattern;
+import com.ftw.hometerview.place.controller.dto.CompanyDto.Meta;
+import java.util.Collections;
+import java.util.List;
+import lombok.AllArgsConstructor;
+import lombok.Builder;
 import lombok.Getter;
 
 public class PlaceDto {
 
-    private static final String LOAD_PATTERN =
-        "(([가-힣A-Za-z·\\d~\\-\\.]{2,}(로|길).[\\d]+)|([가-힣A-Za-z·\\d~\\-\\.]+(읍|동)\\s)[\\d]+)";
-
     @Getter
-    public static class RegisterCompany {
+    @Builder
+    @AllArgsConstructor
+    public static class SearchResult {   // 검색창 자동완성 데이터
 
-        @NotBlank
-        private String name;
-        @NotBlank
-        @Pattern(regexp = LOAD_PATTERN)
-        private String loadName;
-        @NotBlank
-        private String lat;
-        @NotBlank
-        private String lon;
+        List<CompanyDto.Meta> companies;
+        List<BuildingDto.Meta> buildings;
+        List<StationDto.Meta> stations;
 
-        public Company toCompany() {
-            return Company.builder()
-                .name(this.name)
-                .loadName(this.loadName)     // oo시 oo구 oo동 ~~
-                .city(this.loadName.split(" ")[1])
-                .lat(this.lat)
-                .lon(this.lon)
-                .build();
+        public SearchResult(List<Meta> companies) {
+            this.companies = companies;
+            this.buildings = Collections.EMPTY_LIST;
+            this.stations = Collections.EMPTY_LIST;
         }
     }
 

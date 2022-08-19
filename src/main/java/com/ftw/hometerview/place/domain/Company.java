@@ -1,5 +1,7 @@
 package com.ftw.hometerview.place.domain;
 
+import com.ftw.hometerview.core.domain.AbstractDocument;
+import com.ftw.hometerview.place.controller.dto.CompanyDto;
 import lombok.AccessLevel;
 import lombok.Builder;
 import lombok.Getter;
@@ -12,22 +14,29 @@ import org.springframework.data.mongodb.core.mapping.Document;
 @Builder
 @FieldDefaults(level = AccessLevel.PRIVATE)
 @Document(collection = "company")
-public class Company {
+public class Company extends AbstractDocument {
 
     @Id
     ObjectId id;
 
     String name;
     String loadName;
-    String city;
-    String station;
-    String lat;
-    String lon;
+    String province;
+    String stationId;
+    Double lat;
+    Double lon;
 
 
-    public Company setNearliestStation(String station) {
-        this.station = station;
-        return this;
+    public void setNearliestStation(String stationId) {
+        this.stationId = stationId;
+    }
+
+    public CompanyDto.Meta toMeta() {
+        return CompanyDto.Meta.builder()
+            .companyId(String.valueOf(this.id))
+            .name(this.name)
+            .loadName(this.loadName)
+            .build();
     }
 
 }
