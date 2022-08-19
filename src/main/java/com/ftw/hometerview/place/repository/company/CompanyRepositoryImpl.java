@@ -30,7 +30,7 @@ public class CompanyRepositoryImpl implements CompanyRepositoryCustom {
 
     @Override
     public boolean existsByNameAndLoadName(String name, String loadName) {
-        Criteria criteria = Criteria.where("name").is(name).and("loadName").is(loadName);
+        Criteria criteria = Criteria.where(NAME).is(name).and(LOAD_NAME).is(loadName);
         return mongoTemplate.exists(Query.query(criteria), Company.class);
     }
 
