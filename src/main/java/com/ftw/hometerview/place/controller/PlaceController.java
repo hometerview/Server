@@ -19,9 +19,9 @@ public class PlaceController {
     private final PlaceServiceFacade placeService;
 
     @Operation(summary = "소속 수동입력")
-    @PostMapping
+    @PostMapping("/company")
     public ResponseEntity<Void> registerCompany(
-        @Validated @RequestBody PlaceDto.RegisterCompany req) {
+        @Validated @RequestBody CompanyDto.RegisterCompany req) {
         this.placeService.registerCompany(req);
         return ResponseEntity.successResponse();
     }

@@ -1,5 +1,6 @@
 package com.ftw.hometerview.place.service;
 
+import com.ftw.hometerview.place.controller.dto.CompanyDto;
 import com.ftw.hometerview.place.controller.dto.PlaceDto;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
@@ -10,7 +11,7 @@ public class PlaceServiceFacade {
 
     private final CompanyService companyService;
 
-    public void registerCompany(PlaceDto.RegisterCompany req) {
+    public void registerCompany(CompanyDto.RegisterCompany req) {
         this.companyService.register(req);
     }
 
