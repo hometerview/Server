@@ -31,4 +31,10 @@ public class CompanyService {
         return this.companyRepository.existsByNameAndLoadName(name, loadName);
     }
 
+    public List<CompanyDto.Meta> searchByKeyword(String keyword, Pageable pageable) {
+        List<Company> companies = this.companyRepository.searchByKeyword(keyword, pageable);
+        List<CompanyDto.Meta> response = companies.stream().map(Company::toMeta).toList();
+        return response;
+    }
+
 }
