@@ -3,6 +3,7 @@ package com.ftw.hometerview.review.controller.dto;
 import static com.ftw.hometerview.core.interceptor.AuthUtil.getCurrentMemberId;
 
 import com.ftw.hometerview.review.domain.Review;
+import com.ftw.hometerview.review.domain.Review.Floor;
 import com.ftw.hometerview.review.domain.Review.Price;
 import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.NotNull;
@@ -27,6 +28,7 @@ public class ReviewDto {
         @Size(min = 30, max = 900)
         private String disadvantage;
         private Price price;
+        private Floor floor;
 
         public Review toReview() {
             return Review.builder()
@@ -38,6 +40,7 @@ public class ReviewDto {
                 .disadvantage(this.disadvantage)
                 .period(this.period)
                 .price(this.price)
+                .floor(this.floor)
                 .likeCount(0)
                 .bookmarkCount(0)
                 .build();
