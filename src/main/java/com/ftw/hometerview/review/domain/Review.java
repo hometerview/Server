@@ -7,9 +7,10 @@ import lombok.AccessLevel;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.experimental.FieldDefaults;
-import org.bson.types.ObjectId;
 import org.springframework.data.annotation.Id;
 import org.springframework.data.mongodb.core.mapping.Document;
+import org.springframework.data.mongodb.core.mapping.Field;
+import org.springframework.data.mongodb.core.mapping.FieldType;
 
 @Getter
 @Builder
@@ -18,7 +19,8 @@ import org.springframework.data.mongodb.core.mapping.Document;
 public class Review extends AbstractDocument {
 
     @Id
-    ObjectId id;
+    @Field(name = "_id", targetType = FieldType.OBJECT_ID)
+    String id;
 
     String memberId;
     String buildingId;
@@ -29,6 +31,7 @@ public class Review extends AbstractDocument {
     String disadvantage;
 
     String period;
+    Floor floor;
     Price price;
     List<String> certification;
     Integer likeCount;
@@ -40,6 +43,11 @@ public class Review extends AbstractDocument {
         String monthly;     // 월세
         String deposit;     // 전세
         String maintainFee; // 관리비
+    }
+
+    @Getter
+    public enum Floor {
+        LOW, MIDDLE, HIGH
     }
 
     public void modify(ReviewDto.Modify req) {
@@ -59,11 +67,10 @@ public class Review extends AbstractDocument {
     public ReviewDto.Detail toDetail() {
         return ReviewDto.Detail.builder()
             .review(this)
-            .isBookmarked(null)
-            .isLiked(null)
+            .isBookmarked(false)
+            .isLiked(false)
             .build();
     }
-
 
     public ReviewDto.Meta toMeta() {
         return ReviewDto.Meta.builder()
