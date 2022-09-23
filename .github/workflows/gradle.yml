@@ -19,7 +19,7 @@ jobs:
         uses: actions/setup-java@v3
         with:
           java-version: '16'
-          distribution: 'temurin'
+          distribution: 'corretto'
 
       ## create sensitive.yml
       - name: make sensitive.yml
