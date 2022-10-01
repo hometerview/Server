@@ -42,9 +42,9 @@ public class ReviewController {
     }
 
     @Operation(summary = "건물 리뷰 리스트 조회")
-    @GetMapping("/detail")
+    @GetMapping("/building/{buildingId}")
     public ResponseEntity<List<ReviewDto.Detail>> getBuildingReviews(
-        @RequestParam String buildingId,
+        @PathVariable String buildingId,
         @PageableDefault(size = DEFAULT_PAGE_SIZE) Pageable pageable) {
         var reviewList = this.reviewService.getBuildingReviewList(buildingId, pageable);
         return ResponseEntity.successResponse(reviewList);
