@@ -68,7 +68,7 @@ public class ReviewController {
     @Operation(summary = "리뷰 수정")
     @PatchMapping
     public ResponseEntity<Void> modifyReview(@Validated @RequestBody ReviewDto.Modify req) {
-        this.reviewService.modifyReviewList(req);
+        this.reviewService.modifyReview(req);
         return ResponseEntity.successResponse();
     }
 
