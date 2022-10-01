@@ -47,7 +47,7 @@ public class Review extends AbstractDocument {
 
     @Getter
     public enum Floor {
-        LOW, MIDDLE, HIGH
+        LOW, MIDDLE, HIGH, UNKNOWN
     }
 
     public void modify(ReviewDto.Modify req) {
@@ -57,6 +57,7 @@ public class Review extends AbstractDocument {
         this.disadvantage = req.getDisadvantage();
         this.period = req.getPeriod();
         this.price = req.getPrice();
+        this.floor = req.getFloor();
 
     }
 
