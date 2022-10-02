@@ -27,6 +27,19 @@ dependencies {
 	// Cache
 	implementation 'org.springframework.boot:spring-boot-starter-cache'
 
+	// Swagger3
+	implementation group: 'io.springfox', name: 'springfox-swagger-ui', version: '3.0.0'
+
+	//	Oauth 서버와의 통신을 위한 webclient
+	implementation 'org.springframework.boot:spring-boot-starter-webflux'
+
+	//jwt
+	implementation 'io.jsonwebtoken:jjwt:0.9.1'
+	implementation 'javax.xml.bind:jaxb-api'
+
+	// QueryDSL
+	implementation 'com.querydsl:querydsl-jpa:5.0.0'
+
 	// Etc
   	implementation 'io.springfox:springfox-boot-starter:3.0.0'
 }
