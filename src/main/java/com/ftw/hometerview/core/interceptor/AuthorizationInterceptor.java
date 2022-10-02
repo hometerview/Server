@@ -1,11 +1,12 @@
 package com.ftw.hometerview.core.interceptor;
 
+import com.ftw.hometerview.auth.util.JwtTokenProvider;
 import com.ftw.hometerview.core.annotation.NonAuthorized;
 import com.ftw.hometerview.core.domain.ResponseType;
 import com.ftw.hometerview.core.exception.UnauthorizedException;
-import com.ftw.hometerview.core.util.Constants;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.lang.Nullable;
 import org.springframework.stereotype.Component;
@@ -15,22 +16,33 @@ import org.springframework.web.servlet.HandlerInterceptor;
 
 @Slf4j
 @Component
+@RequiredArgsConstructor
 public class AuthorizationInterceptor implements HandlerInterceptor {
+
+    private final JwtTokenProvider jwtTokenProvider;
 
     @Override
     public boolean preHandle(HttpServletRequest request, HttpServletResponse response,
         Object handler) {
+
         log.info("[preHandler] request uri : {}", request.getRequestURI());
         if (isNonAuthorize(handler)) {
             return true;
         }
-        String memberId = request.getHeader(Constants.AUTH_HEADER_KEY);
-        if (!StringUtils.hasText(memberId)) {
+
+        tokenAuthorize(request);
+
+        return true;
+    }
+
+    private void tokenAuthorize(HttpServletRequest request) {
+        String accessToken = jwtTokenProvider.resolveToken(request);
+
+        if (!StringUtils.hasText(accessToken)) {
             throw new UnauthorizedException(ResponseType.REQUEST_UNAUTHORIZED);
         }
-        log.info("[HEADER] Member No: {}", memberId);
-        AuthorizationContextHolder.setContext(AuthContent.builder().memberId(memberId).build());
-        return true;
+
+        AuthorizationContextHolder.setContext(jwtTokenProvider.getAuthentication(accessToken));
     }
 
     private boolean isNonAuthorize(Object handler) {
