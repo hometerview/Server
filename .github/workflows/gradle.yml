@@ -54,6 +54,7 @@ jobs:
           username: ec2-user
           key: ${{ secrets.PEM_KEY }}
           script: |
+            sudo docker-compose down
             sudo docker rmi ${{ secrets.DOCKER_REPO }}/hometerview
-            docker-compose up -d
             docker image prune -f
+            docker-compose up -d
