@@ -14,7 +14,7 @@ public interface ReviewService {
 
     void registerReview(ReviewDto.Create req);
 
-    void modifyReviewList(ReviewDto.Modify req);
+    void modifyReview(ReviewDto.Modify req);
 
     void deleteReview(String reviewId);
 

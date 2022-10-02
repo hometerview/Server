@@ -59,7 +59,7 @@ public class ReviewServiceImpl implements ReviewService {
     }
 
     @Override
-    public void modifyReviewList(Modify req) {
+    public void modifyReview(Modify req) {
         Review review = getReviewWithAuthCheck(req.getReviewId());
         review.modify(req);
         setCertification(review);
