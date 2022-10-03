@@ -23,8 +23,9 @@ public class AuthService {
     public Map<String, String> getNewAccessToken(HttpServletRequest request, String refreshToken) {
         String accessToken = jwtTokenProvider.resolveToken(request);
 
-        jwtTokenProvider.getPayLoad(refreshToken);
-        String memberId = jwtTokenProvider.getExpiredPayLoad(accessToken);
+        // Check refresh token validation
+        jwtTokenProvider.getPayload(refreshToken, true);
+        String memberId = jwtTokenProvider.getPayload(accessToken, false);
 
         Member member = memberRepository.findByMemberId(memberId).orElseThrow(
             () -> new BadRequestException(ResponseType.MEMBER_NOT_EXIST_ID)

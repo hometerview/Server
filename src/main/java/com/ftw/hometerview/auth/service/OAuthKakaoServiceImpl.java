@@ -44,8 +44,7 @@ public class OAuthKakaoServiceImpl implements OAuthService {
         String nickname = String.valueOf(properties.get("nickname"));
 
         String accessToken = jwtTokenProvider.createAccessToken(memberId);
-        String refreshToken = jwtTokenProvider.createRefreshToken(memberId);
-
+        String refreshToken = jwtTokenProvider.createRefreshToken();
 
         // Check if requester are subscribed to the server through requester member ID
         Optional<Member> member = memberRepository.findByMemberId(memberId);
@@ -65,7 +64,7 @@ public class OAuthKakaoServiceImpl implements OAuthService {
                 .nickname(nickname)
                 .build());
         }
-        
+
         LoginResponse loginResponse = LoginResponse.builder()
             .accessToken(accessToken)
             .refreshToken(refreshToken)

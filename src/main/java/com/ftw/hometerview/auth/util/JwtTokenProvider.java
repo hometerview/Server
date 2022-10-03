@@ -32,14 +32,14 @@ public class JwtTokenProvider {
         return createToken(payload, accessTokenValidityInMilliseconds);
     }
 
-    public String createRefreshToken(String payload) {
+    public String createRefreshToken() {
         byte[] array = new byte[7];
         new Random().nextBytes(array);
         String generatedString = new String(array, StandardCharsets.UTF_8);
         return createToken(generatedString, refreshTokenValidityInMilliseconds);
     }
 
-    public String createToken(String payload, long expireLength) {
+    private String createToken(String payload, long expireLength) {
         Claims claims = Jwts.claims().setSubject(payload);
         Date now = new Date();
         Date validity = new Date(now.getTime() + expireLength);
@@ -51,31 +51,26 @@ public class JwtTokenProvider {
             .compact();
     }
 
-    public String getPayLoad(String token) {
+    public String getPayload(String token, boolean throwExpiredException) {
         try {
-            return Jwts.parser()
-                .setSigningKey(secretKey)
-                .parseClaimsJws(token)
-                .getBody()
-                .getSubject();
+            return jwtParse(token);
         } catch (ExpiredJwtException e) {
-            throw new UnauthorizedException(ResponseType.JWT_EXPIRED);
-        } catch (JwtException | IllegalArgumentException e) {
-            throw new UnauthorizedException(ResponseType.JWT_NOT_VALID);
+            if(throwExpiredException) {
+                throw new UnauthorizedException(ResponseType.JWT_EXPIRED);
+            }
+            return e.getClaims().getSubject();
         }
     }
 
-    public String getExpiredPayLoad(String token) {
+    private String jwtParse(String token) throws ExpiredJwtException {
         try {
             return Jwts.parser()
                 .setSigningKey(secretKey)
                 .parseClaimsJws(token)
                 .getBody()
                 .getSubject();
-        } catch (ExpiredJwtException e) {
-            return e.getClaims().getSubject();
         } catch (JwtException | IllegalArgumentException e) {
-            throw new UnauthorizedException(ResponseType.JWT_NOT_VALID);
+            throw new UnauthorizedException((ResponseType.JWT_NOT_VALID));
         }
     }
 
@@ -84,7 +79,7 @@ public class JwtTokenProvider {
     }
 
     public AuthContent getAuthentication(String token) {
-        String memberId = this.getPayLoad(token);
+        String memberId = this.getPayload(token, true);
         return AuthContent.builder().memberId(memberId).build();
     }
 }
