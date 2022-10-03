@@ -55,8 +55,8 @@ public class OAuthKakaoServiceImpl implements OAuthService {
             if (!providerType.equals(ProviderType.KAKAO)) {
                 throw new BaseException(ResponseType.AUTH_NOT_MATCH_PROVIDER);
             }
-
             member.get().setRefreshToken(refreshToken);
+            memberRepository.save(member.get());
         } else {
             memberRepository.save(Member.builder()
                 .memberId(memberId)
