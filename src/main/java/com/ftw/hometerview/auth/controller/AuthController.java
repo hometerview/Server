@@ -30,10 +30,7 @@ public class AuthController {
     @NonAuthorized
     @PostMapping("/login/kakao")
     public ResponseEntity<LoginResponse> kakaoLogin(@RequestBody LoginRequest loginRequest) {
-        var response = oAuthKakaoServiceImpl.login(LoginRequest.builder()
-            .accessToken(loginRequest.getAccessToken())
-            .refreshToken(loginRequest.getRefreshToken())
-            .build());
+        var response = oAuthKakaoServiceImpl.login(loginRequest);
         return ResponseEntity.successResponse(response);
     }
 
