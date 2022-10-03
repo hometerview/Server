@@ -21,17 +21,17 @@ jobs:
           java-version: '16'
           distribution: 'corretto'
 
-      ## create sensitive.yml
-      - name: make sensitive.yml
+      ## create application-dev.yml
+      - name: make application-dev.yml
         run: |
-          ## create sensitive.yml
+          ## create application-dev.yml
           cd ./src/main/resources
           
           # sensitive.yaml 파일 생성
-          touch ./sensitive.yaml
+          touch ./application-dev.yml
           
-          # GitHub-Actions 에서 설정한 값을 sensitive.yaml 파일에 쓰기
-          echo "${{ secrets.SENSITIVE_KEY_VALUE }}" >> ./sensitive.yml
+          # GitHub-Actions 에서 설정한 값을 application-dev.yaml 파일에 쓰기
+          echo "${{ secrets.SENSITIVE_KEY_VALUE }}" >> ./application-dev.yml
         shell: bash
 
       ## gradle build
@@ -54,7 +54,8 @@ jobs:
           username: ec2-user
           key: ${{ secrets.PEM_KEY }}
           script: |
+            sudo docker ps
             sudo docker-compose down
-            sudo docker rmi ${{ secrets.DOCKER_REPO }}/hometerview
+            sudo docker rmi ${{ secrets.DOCKER_REPO }}/hometerview -f
             docker image prune -f
             docker-compose up -d
