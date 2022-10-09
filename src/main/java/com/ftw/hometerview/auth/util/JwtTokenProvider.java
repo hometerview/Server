@@ -53,29 +53,53 @@ public class JwtTokenProvider {
 
     public String getPayload(String token, boolean throwExpiredException) {
         try {
-            return jwtParse(token);
+            return parseJwt(token);
         } catch (ExpiredJwtException e) {
-            if(throwExpiredException) {
+            if (throwExpiredException) {
                 throw new UnauthorizedException(ResponseType.JWT_EXPIRED);
             }
             return e.getClaims().getSubject();
-        }
-    }
-
-    private String jwtParse(String token) throws ExpiredJwtException {
-        try {
-            return Jwts.parser()
-                .setSigningKey(secretKey)
-                .parseClaimsJws(token)
-                .getBody()
-                .getSubject();
         } catch (JwtException | IllegalArgumentException e) {
             throw new UnauthorizedException((ResponseType.JWT_NOT_VALID));
         }
     }
 
-    public String resolveToken(HttpServletRequest req) {
-        return req.getHeader(Constants.AUTH_HEADER_KEY);
+    public boolean isExpiredToken(String token) {
+        try {
+            parseJwt(token);
+            return false;
+        } catch (ExpiredJwtException e) {
+            return true;
+        } catch (Exception e) {
+            return false;
+        }
+    }
+
+    public boolean isValidToken(String token) {
+        try {
+            parseJwt(token);
+            return true;
+        } catch (ExpiredJwtException e) {
+            return true;
+        } catch (Exception e) {
+            return false;
+        }
+    }
+
+    private String parseJwt(String token) throws JwtException, IllegalArgumentException {
+        return Jwts.parser()
+            .setSigningKey(secretKey)
+            .parseClaimsJws(token)
+            .getBody()
+            .getSubject();
+    }
+
+    public String resolveAccessToken(HttpServletRequest req) {
+        return req.getHeader(Constants.AUTH_ACCESS_HEADER_KEY);
+    }
+
+    public String resolveRefreshToken(HttpServletRequest req) {
+        return req.getHeader(Constants.AUTH_REFRESH_HEADER_KEY);
     }
 
     public AuthContent getAuthentication(String token) {

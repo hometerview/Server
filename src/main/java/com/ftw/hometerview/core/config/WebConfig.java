@@ -1,5 +1,6 @@
 package com.ftw.hometerview.core.config;
 
+import com.ftw.hometerview.auth.service.AuthService;
 import com.ftw.hometerview.auth.util.JwtTokenProvider;
 import com.ftw.hometerview.core.interceptor.AuthorizationInterceptor;
 import lombok.RequiredArgsConstructor;
@@ -15,9 +16,11 @@ public class WebConfig implements WebMvcConfigurer {
 
     private final JwtTokenProvider jwtTokenProvider;
 
+    private final AuthService authService;
+
     @Override
     public void addInterceptors(InterceptorRegistry registry) {
-        registry.addInterceptor(new AuthorizationInterceptor(jwtTokenProvider))
+        registry.addInterceptor(new AuthorizationInterceptor(jwtTokenProvider, authService))
             .addPathPatterns("/api/**");
     }
 }
