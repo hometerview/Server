@@ -13,6 +13,7 @@ import springfox.documentation.service.ApiInfo;
 import springfox.documentation.service.ApiKey;
 import springfox.documentation.service.AuthorizationScope;
 import springfox.documentation.service.SecurityReference;
+import springfox.documentation.service.SecurityScheme;
 import springfox.documentation.spi.DocumentationType;
 import springfox.documentation.spi.service.contexts.SecurityContext;
 import springfox.documentation.spring.web.plugins.Docket;
@@ -25,7 +26,7 @@ public class SwaggerConfig {
     public Docket api() {
         return new Docket(DocumentationType.OAS_30)
             .apiInfo(apiInfo())
-            .securitySchemes(List.of(apiKey()))
+            .securitySchemes(apiKey())
             .securityContexts(List.of(securityContext()))
             .useDefaultResponseMessages(false)
             .groupName("hometerview-server")
@@ -43,8 +44,11 @@ public class SwaggerConfig {
             .build();
     }
 
-    private ApiKey apiKey() {
-        return new ApiKey(Constants.AUTH_HEADER_KEY, "JWT", "header");
+    private List<SecurityScheme> apiKey() {
+        return List.of(
+            new ApiKey(Constants.AUTH_ACCESS_HEADER_KEY, "JWT_ACCESS", "header"),
+            new ApiKey(Constants.AUTH_REFRESH_HEADER_KEY, "JWT_REFRESH", "header")
+        );
     }
 
     private SecurityContext securityContext() {
@@ -57,7 +61,10 @@ public class SwaggerConfig {
         AuthorizationScope authorizationScope = new AuthorizationScope("global",
             "accessEverything");
         AuthorizationScope[] authorizationScopes = new AuthorizationScope[]{authorizationScope};
-        return List.of(new SecurityReference(Constants.AUTH_HEADER_KEY, authorizationScopes));
+        return List.of(
+            new SecurityReference(Constants.AUTH_ACCESS_HEADER_KEY, authorizationScopes),
+            new SecurityReference(Constants.AUTH_REFRESH_HEADER_KEY, authorizationScopes)
+        );
     }
 
 }
