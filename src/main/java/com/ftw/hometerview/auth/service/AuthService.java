@@ -1,6 +1,7 @@
 package com.ftw.hometerview.auth.service;
 
 import com.ftw.hometerview.auth.util.JwtTokenProvider;
+import com.ftw.hometerview.auth.util.vo.TokenData;
 import com.ftw.hometerview.core.domain.ResponseType;
 import com.ftw.hometerview.core.exception.NotFoundException;
 import com.ftw.hometerview.core.exception.UnauthorizedException;
@@ -22,16 +23,14 @@ public class AuthService {
     private final MemberRepository memberRepository;
 
     @Transactional
-    public String reissueAccessToken(String accessToken, String refreshToken,
+    public void reissueAccessTokenToHeader(String memberId, String refreshToken,
         HttpServletResponse response) {
-        if(!jwtTokenProvider.isValidToken(refreshToken)) {
-           throw new UnauthorizedException(ResponseType.JWT_NOT_VALID);
-        }
-        if(jwtTokenProvider.isExpiredToken(refreshToken)) {
-            throw new UnauthorizedException(ResponseType.AUTH_REQUIRE_LOGIN);
-        }
 
-        String memberId = jwtTokenProvider.getPayload(accessToken, false);
+        TokenData refreshTokenData = jwtTokenProvider.getTokenData(refreshToken);
+        switch (refreshTokenData.getTokenStatus()) {
+            case INVALID -> throw new UnauthorizedException(ResponseType.JWT_NOT_VALID);
+            case EXPIRED -> throw new UnauthorizedException(ResponseType.AUTH_REQUIRE_LOGIN);
+        }
 
         Member member = memberRepository.findByMemberId(memberId).orElseThrow(
             () -> new NotFoundException(ResponseType.MEMBER_NOT_EXIST_ID)
@@ -45,6 +44,5 @@ public class AuthService {
         String newAccessToken = jwtTokenProvider.createAccessToken(memberId);
         log.info("[reissue] success");
         response.setHeader(Constants.AUTH_ACCESS_HEADER_KEY, newAccessToken);
-        return newAccessToken;
     }
 }

@@ -1,7 +1,7 @@
 package com.ftw.hometerview.auth.util;
 
-import com.ftw.hometerview.core.domain.ResponseType;
-import com.ftw.hometerview.core.exception.UnauthorizedException;
+import com.ftw.hometerview.auth.util.vo.TokenData;
+import com.ftw.hometerview.auth.util.vo.TokenData.TokenStatus;
 import com.ftw.hometerview.core.interceptor.AuthContent;
 import com.ftw.hometerview.core.util.Constants;
 import io.jsonwebtoken.Claims;
@@ -51,38 +51,22 @@ public class JwtTokenProvider {
             .compact();
     }
 
-    public String getPayload(String token, boolean throwExpiredException) {
+    public TokenData getTokenData(String token) {
         try {
-            return parseJwt(token);
+            String payload = parseJwt(token);
+            return TokenData.builder()
+                .payload(payload)
+                .tokenStatus(TokenStatus.VALID)
+                .build();
         } catch (ExpiredJwtException e) {
-            if (throwExpiredException) {
-                throw new UnauthorizedException(ResponseType.JWT_EXPIRED);
-            }
-            return e.getClaims().getSubject();
-        } catch (JwtException | IllegalArgumentException e) {
-            throw new UnauthorizedException((ResponseType.JWT_NOT_VALID));
-        }
-    }
-
-    public boolean isExpiredToken(String token) {
-        try {
-            parseJwt(token);
-            return false;
-        } catch (ExpiredJwtException e) {
-            return true;
+            return TokenData.builder()
+                .payload(e.getClaims().getSubject())
+                .tokenStatus(TokenStatus.EXPIRED)
+                .build();
         } catch (Exception e) {
-            return false;
-        }
-    }
-
-    public boolean isValidToken(String token) {
-        try {
-            parseJwt(token);
-            return true;
-        } catch (ExpiredJwtException e) {
-            return true;
-        } catch (Exception e) {
-            return false;
+            return TokenData.builder()
+                .tokenStatus(TokenStatus.INVALID)
+                .build();
         }
     }
 
@@ -102,8 +86,7 @@ public class JwtTokenProvider {
         return req.getHeader(Constants.AUTH_REFRESH_HEADER_KEY);
     }
 
-    public AuthContent getAuthentication(String token) {
-        String memberId = this.getPayload(token, true);
+    public AuthContent getAuthentication(String memberId) {
         return AuthContent.builder().memberId(memberId).build();
     }
 }

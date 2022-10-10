@@ -2,6 +2,7 @@ package com.ftw.hometerview.core.interceptor;
 
 import com.ftw.hometerview.auth.service.AuthService;
 import com.ftw.hometerview.auth.util.JwtTokenProvider;
+import com.ftw.hometerview.auth.util.vo.TokenData;
 import com.ftw.hometerview.core.annotation.NonAuthorized;
 import com.ftw.hometerview.core.domain.ResponseType;
 import com.ftw.hometerview.core.exception.UnauthorizedException;
@@ -47,15 +48,15 @@ public class AuthorizationInterceptor implements HandlerInterceptor {
             throw new UnauthorizedException(ResponseType.REQUEST_UNAUTHORIZED);
         }
 
-        if (!jwtTokenProvider.isValidToken(accessToken)) {
-            throw new UnauthorizedException(ResponseType.JWT_NOT_VALID);
+        TokenData accessTokenData = jwtTokenProvider.getTokenData(accessToken);
+        String memberId = accessTokenData.getPayload();
+
+        switch (accessTokenData.getTokenStatus()) {
+            case INVALID -> throw new UnauthorizedException(ResponseType.JWT_NOT_VALID);
+            case EXPIRED -> authService.reissueAccessTokenToHeader(memberId, refreshToken, response);
         }
 
-        if (jwtTokenProvider.isExpiredToken(accessToken)) {
-            accessToken = authService.reissueAccessToken(accessToken, refreshToken, response);
-        }
-
-        AuthorizationContextHolder.setContext(jwtTokenProvider.getAuthentication(accessToken));
+        AuthorizationContextHolder.setContext(jwtTokenProvider.getAuthentication(memberId));
     }
 
     private boolean isNonAuthorize(Object handler) {
