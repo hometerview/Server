@@ -3,7 +3,6 @@ package com.ftw.hometerview.auth.util;
 import com.ftw.hometerview.auth.util.vo.TokenData;
 import com.ftw.hometerview.auth.util.vo.TokenData.TokenStatus;
 import com.ftw.hometerview.core.interceptor.AuthContent;
-import com.ftw.hometerview.core.util.Constants;
 import io.jsonwebtoken.Claims;
 import io.jsonwebtoken.ExpiredJwtException;
 import io.jsonwebtoken.JwtException;
@@ -12,7 +11,6 @@ import io.jsonwebtoken.SignatureAlgorithm;
 import java.nio.charset.StandardCharsets;
 import java.util.Date;
 import java.util.Random;
-import javax.servlet.http.HttpServletRequest;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Component;
 
