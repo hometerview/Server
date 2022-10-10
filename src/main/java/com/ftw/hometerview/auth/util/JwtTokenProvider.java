@@ -78,14 +78,6 @@ public class JwtTokenProvider {
             .getSubject();
     }
 
-    public String resolveAccessToken(HttpServletRequest req) {
-        return req.getHeader(Constants.AUTH_ACCESS_HEADER_KEY);
-    }
-
-    public String resolveRefreshToken(HttpServletRequest req) {
-        return req.getHeader(Constants.AUTH_REFRESH_HEADER_KEY);
-    }
-
     public AuthContent getAuthentication(String memberId) {
         return AuthContent.builder().memberId(memberId).build();
     }

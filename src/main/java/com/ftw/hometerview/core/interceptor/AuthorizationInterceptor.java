@@ -6,6 +6,7 @@ import com.ftw.hometerview.auth.util.vo.TokenData;
 import com.ftw.hometerview.core.annotation.NonAuthorized;
 import com.ftw.hometerview.core.domain.ResponseType;
 import com.ftw.hometerview.core.exception.UnauthorizedException;
+import com.ftw.hometerview.core.util.Constants;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import lombok.RequiredArgsConstructor;
@@ -41,8 +42,8 @@ public class AuthorizationInterceptor implements HandlerInterceptor {
     }
 
     private void tokenAuthorize(HttpServletRequest request, HttpServletResponse response) {
-        String accessToken = jwtTokenProvider.resolveAccessToken(request);
-        String refreshToken = jwtTokenProvider.resolveRefreshToken(request);
+        String accessToken = request.getHeader(Constants.AUTH_ACCESS_HEADER_KEY);
+        String refreshToken =  request.getHeader(Constants.AUTH_REFRESH_HEADER_KEY);
 
         if (!StringUtils.hasText(accessToken) || !StringUtils.hasText(refreshToken)) {
             throw new UnauthorizedException(ResponseType.REQUEST_UNAUTHORIZED);
