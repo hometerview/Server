@@ -1,17 +1,20 @@
 package com.ftw.hometerview.auth.service;
 
 import com.ftw.hometerview.auth.util.JwtTokenProvider;
+import com.ftw.hometerview.auth.util.vo.TokenData;
 import com.ftw.hometerview.core.domain.ResponseType;
-import com.ftw.hometerview.core.exception.BadRequestException;
+import com.ftw.hometerview.core.exception.NotFoundException;
+import com.ftw.hometerview.core.exception.UnauthorizedException;
+import com.ftw.hometerview.core.util.Constants;
 import com.ftw.hometerview.member.domain.Member;
 import com.ftw.hometerview.member.repository.MemberRepository;
-import java.util.HashMap;
-import java.util.Map;
-import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+@Slf4j
 @Service
 @RequiredArgsConstructor
 public class AuthService {
@@ -20,26 +23,26 @@ public class AuthService {
     private final MemberRepository memberRepository;
 
     @Transactional
-    public Map<String, String> getNewAccessToken(HttpServletRequest request, String refreshToken) {
-        String accessToken = jwtTokenProvider.resolveToken(request);
+    public void reissueAccessTokenToHeader(String memberId, String refreshToken,
+        HttpServletResponse response) {
 
-        // Check refresh token validation
-        jwtTokenProvider.getPayload(refreshToken, true);
-        String memberId = jwtTokenProvider.getPayload(accessToken, false);
+        TokenData refreshTokenData = jwtTokenProvider.getTokenData(refreshToken);
+        switch (refreshTokenData.getTokenStatus()) {
+            case INVALID -> throw new UnauthorizedException(ResponseType.JWT_NOT_VALID);
+            case EXPIRED -> throw new UnauthorizedException(ResponseType.AUTH_REQUIRE_LOGIN);
+        }
 
         Member member = memberRepository.findByMemberId(memberId).orElseThrow(
-            () -> new BadRequestException(ResponseType.MEMBER_NOT_EXIST_ID)
+            () -> new NotFoundException(ResponseType.MEMBER_NOT_EXIST_ID)
         );
 
         String savedRefreshToken = member.getRefreshToken();
-        if (savedRefreshToken.equals(refreshToken)) {
-            throw new BadRequestException(ResponseType.JWT_NOT_VALID);
+        if (!savedRefreshToken.equals(refreshToken)) {
+            throw new UnauthorizedException(ResponseType.JWT_NOT_VALID);
         }
 
         String newAccessToken = jwtTokenProvider.createAccessToken(memberId);
-
-        Map<String, String> response = new HashMap<>();
-        response.put("accessToken", newAccessToken);
-        return response;
+        log.info("[reissue] success");
+        response.setHeader(Constants.AUTH_ACCESS_HEADER_KEY, newAccessToken);
     }
 }

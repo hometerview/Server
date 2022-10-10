@@ -1,9 +1,8 @@
 package com.ftw.hometerview.auth.util;
 
-import com.ftw.hometerview.core.domain.ResponseType;
-import com.ftw.hometerview.core.exception.UnauthorizedException;
+import com.ftw.hometerview.auth.util.vo.TokenData;
+import com.ftw.hometerview.auth.util.vo.TokenData.TokenStatus;
 import com.ftw.hometerview.core.interceptor.AuthContent;
-import com.ftw.hometerview.core.util.Constants;
 import io.jsonwebtoken.Claims;
 import io.jsonwebtoken.ExpiredJwtException;
 import io.jsonwebtoken.JwtException;
@@ -12,7 +11,6 @@ import io.jsonwebtoken.SignatureAlgorithm;
 import java.nio.charset.StandardCharsets;
 import java.util.Date;
 import java.util.Random;
-import javax.servlet.http.HttpServletRequest;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Component;
 
@@ -51,35 +49,34 @@ public class JwtTokenProvider {
             .compact();
     }
 
-    public String getPayload(String token, boolean throwExpiredException) {
+    public TokenData getTokenData(String token) {
         try {
-            return jwtParse(token);
+            String payload = parseJwt(token);
+            return TokenData.builder()
+                .payload(payload)
+                .tokenStatus(TokenStatus.VALID)
+                .build();
         } catch (ExpiredJwtException e) {
-            if(throwExpiredException) {
-                throw new UnauthorizedException(ResponseType.JWT_EXPIRED);
-            }
-            return e.getClaims().getSubject();
+            return TokenData.builder()
+                .payload(e.getClaims().getSubject())
+                .tokenStatus(TokenStatus.EXPIRED)
+                .build();
+        } catch (Exception e) {
+            return TokenData.builder()
+                .tokenStatus(TokenStatus.INVALID)
+                .build();
         }
     }
 
-    private String jwtParse(String token) throws ExpiredJwtException {
-        try {
-            return Jwts.parser()
-                .setSigningKey(secretKey)
-                .parseClaimsJws(token)
-                .getBody()
-                .getSubject();
-        } catch (JwtException | IllegalArgumentException e) {
-            throw new UnauthorizedException((ResponseType.JWT_NOT_VALID));
-        }
+    private String parseJwt(String token) throws JwtException, IllegalArgumentException {
+        return Jwts.parser()
+            .setSigningKey(secretKey)
+            .parseClaimsJws(token)
+            .getBody()
+            .getSubject();
     }
 
-    public String resolveToken(HttpServletRequest req) {
-        return req.getHeader(Constants.AUTH_HEADER_KEY);
-    }
-
-    public AuthContent getAuthentication(String token) {
-        String memberId = this.getPayload(token, true);
+    public AuthContent getAuthentication(String memberId) {
         return AuthContent.builder().memberId(memberId).build();
     }
 }

@@ -1,9 +1,12 @@
 package com.ftw.hometerview.core.interceptor;
 
+import com.ftw.hometerview.auth.service.AuthService;
 import com.ftw.hometerview.auth.util.JwtTokenProvider;
+import com.ftw.hometerview.auth.util.vo.TokenData;
 import com.ftw.hometerview.core.annotation.NonAuthorized;
 import com.ftw.hometerview.core.domain.ResponseType;
 import com.ftw.hometerview.core.exception.UnauthorizedException;
+import com.ftw.hometerview.core.util.Constants;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import lombok.RequiredArgsConstructor;
@@ -21,28 +24,40 @@ public class AuthorizationInterceptor implements HandlerInterceptor {
 
     private final JwtTokenProvider jwtTokenProvider;
 
+    private final AuthService authService;
+
     @Override
     public boolean preHandle(HttpServletRequest request, HttpServletResponse response,
         Object handler) {
 
-        log.info("[preHandler] request uri : {}", request.getRequestURI());
+        log.info("[preHandler] request uri : [{}] {}", request.getMethod(),
+            request.getRequestURI());
         if (isNonAuthorize(handler)) {
             return true;
         }
 
-        tokenAuthorize(request);
+        tokenAuthorize(request, response);
 
         return true;
     }
 
-    private void tokenAuthorize(HttpServletRequest request) {
-        String accessToken = jwtTokenProvider.resolveToken(request);
+    private void tokenAuthorize(HttpServletRequest request, HttpServletResponse response) {
+        String accessToken = request.getHeader(Constants.AUTH_ACCESS_HEADER_KEY);
+        String refreshToken =  request.getHeader(Constants.AUTH_REFRESH_HEADER_KEY);
 
-        if (!StringUtils.hasText(accessToken)) {
+        if (!StringUtils.hasText(accessToken) || !StringUtils.hasText(refreshToken)) {
             throw new UnauthorizedException(ResponseType.REQUEST_UNAUTHORIZED);
         }
 
-        AuthorizationContextHolder.setContext(jwtTokenProvider.getAuthentication(accessToken));
+        TokenData accessTokenData = jwtTokenProvider.getTokenData(accessToken);
+        String memberId = accessTokenData.getPayload();
+
+        switch (accessTokenData.getTokenStatus()) {
+            case INVALID -> throw new UnauthorizedException(ResponseType.JWT_NOT_VALID);
+            case EXPIRED -> authService.reissueAccessTokenToHeader(memberId, refreshToken, response);
+        }
+
+        AuthorizationContextHolder.setContext(jwtTokenProvider.getAuthentication(memberId));
     }
 
     private boolean isNonAuthorize(Object handler) {

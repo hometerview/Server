@@ -7,6 +7,7 @@ import lombok.Builder;
 import lombok.Getter;
 import lombok.experimental.FieldDefaults;
 import org.springframework.data.mongodb.core.mapping.Document;
+import org.springframework.data.mongodb.core.mapping.FieldType;
 import org.springframework.data.mongodb.core.mapping.MongoId;
 
 @Builder
@@ -15,7 +16,7 @@ import org.springframework.data.mongodb.core.mapping.MongoId;
 @FieldDefaults(level = AccessLevel.PRIVATE)
 public class Member extends AbstractDocument {
 
-    @MongoId
+    @MongoId(FieldType.OBJECT_ID)
     String id;
 
     String memberId;

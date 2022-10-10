@@ -21,16 +21,15 @@ public enum ResponseType {
     JWT_SIGNATURE("CM07", "시그니처 검증에 실패한 토큰입니다."),
     JWT_EXPIRED("CM08", "만료된 토큰입니다."),
     JWT_NULL_OR_EMPTY("CM09", "토큰이 없거나 값이 비어있습니다."),
-    JWT_HEADER_PREFIX("CM10", "토큰 값은 " + Constants.AUTH_HEADER_KEY + " 로 시작해야 합니다."),
+    JWT_HEADER_PREFIX("CM10", "토큰 값은 " + Constants.AUTH_ACCESS_HEADER_KEY + " 로 시작해야 합니다."),
 
     // AUTH
     AUTH_NULL_TOKEN("AU01", "토큰을 찾을 수 없습니다."),
     AUTH_NOT_SAME_TOKEN("AU02", "저장된 토큰과 일치하지 않습니다."),
     AUTH_NOT_SAME_USER("AU03", "Access와 Refresh 토큰의 사용자가 일치하지 않습니다."),
-    AUTH_NOT_FOUND_REDIS_KEY("AU04", "Redis에서 해당 Key를 찾을 수 없습니다."),
-    AUTH_NOT_FOUND_COOKIE_KEY("AU05", "Cookie에서 해당 Key를 찾을 수 없습니다."),
     AUTH_NOT_SUPPORT_PROVIDER("AU06", "지원하지 않는 Provider입니다."),
     AUTH_NOT_MATCH_PROVIDER("AU07", "가입된 OAuth 제공자와 일치하지 않습니다."),
+    AUTH_REQUIRE_LOGIN("AU08", "재로그인이 필요합니다."),
 
     // MEMBER
     MEMBER_NOT_EXIST_ID("ME01", "존재하지 않는 사용자입니다."),
