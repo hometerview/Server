@@ -8,9 +8,9 @@ import lombok.AccessLevel;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.experimental.FieldDefaults;
-import org.bson.types.ObjectId;
-import org.springframework.data.annotation.Id;
 import org.springframework.data.mongodb.core.mapping.Document;
+import org.springframework.data.mongodb.core.mapping.FieldType;
+import org.springframework.data.mongodb.core.mapping.MongoId;
 
 @Getter
 @Builder
@@ -18,8 +18,8 @@ import org.springframework.data.mongodb.core.mapping.Document;
 @Document(collection = "building")
 public class Building extends AbstractDocument {
 
-    @Id
-    ObjectId id;
+    @MongoId(FieldType.OBJECT_ID)
+    String id;
 
     String name;
     String loadName;
@@ -37,7 +37,7 @@ public class Building extends AbstractDocument {
 
     public BuildingDto.Meta toMeta() {
         return BuildingDto.Meta.builder()
-            .buildingId(String.valueOf(this.id))
+            .buildingId(this.id)
             .name(this.name)
             .loadName(this.loadName)
             .build();
