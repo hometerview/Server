@@ -22,6 +22,7 @@ public enum ResponseType {
     JWT_EXPIRED("CM08", "만료된 토큰입니다."),
     JWT_NULL_OR_EMPTY("CM09", "토큰이 없거나 값이 비어있습니다."),
     JWT_HEADER_PREFIX("CM10", "토큰 값은 " + Constants.AUTH_ACCESS_HEADER_KEY + " 로 시작해야 합니다."),
+    DATA_DUPLICATED("CM11", "이미 존재하는 값입니다"),
 
     // AUTH
     AUTH_NULL_TOKEN("AU01", "토큰을 찾을 수 없습니다."),
