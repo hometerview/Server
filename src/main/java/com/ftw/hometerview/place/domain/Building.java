@@ -28,7 +28,7 @@ public class Building extends AbstractDocument {
     Double lon;
     ResidenceType residenceType;
 
-    Integer totalRating = 0;
+    Double totalRating = 0D;
     List<String> likedUsers = Collections.EMPTY_LIST;
 
     public enum ResidenceType {
