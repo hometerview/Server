@@ -17,7 +17,7 @@ public class BuildingDto {
 
     @Getter
     @Builder
-    public static class Brief {
+    public static class Info {
 
         private String buildingId;
         private String name;
