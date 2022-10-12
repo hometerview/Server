@@ -26,7 +26,7 @@ public class StationService {
     }
 
     public Map<String, Station> getByIds(List<String> stationIds) {
-        return unmodifiableMap(this.stationRepository.findByIds(stationIds)
+        return unmodifiableMap(this.stationRepository.findAllByIdIn(stationIds)
             .stream().collect(Collectors.toMap(Station::getId, Function.identity())));
     }
 

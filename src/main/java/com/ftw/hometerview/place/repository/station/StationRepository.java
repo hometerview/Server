@@ -8,6 +8,6 @@ import org.springframework.stereotype.Repository;
 @Repository
 public interface StationRepository extends MongoRepository<Station, String>,StationRepositoryCustom {
 
-    List<Station> findByIds(List<String> ids);
+    List<Station> findAllByIdIn(List<String> ids);
 
 }
