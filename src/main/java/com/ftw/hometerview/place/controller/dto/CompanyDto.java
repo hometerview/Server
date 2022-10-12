@@ -38,7 +38,8 @@ public class CompanyDto {
         private String companyId;
         private String name;
         private String loadName;
-        private String station;
+        private String nearestStation;
+
     }
 
 }
