@@ -40,6 +40,9 @@ public class CompanyDto {
         private String loadName;
         private String nearestStation;
 
+        public void setStationName(String stationName) {
+            this.nearestStation = stationName;
+        }
     }
 
 }

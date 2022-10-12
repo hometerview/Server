@@ -6,7 +6,9 @@ import com.ftw.hometerview.place.controller.dto.BuildingDto;
 import com.ftw.hometerview.place.controller.dto.PlaceDto.SearchResult;
 import com.ftw.hometerview.place.controller.dto.StationDto;
 import com.ftw.hometerview.place.domain.SearchType;
+import com.ftw.hometerview.place.domain.Station;
 import java.util.List;
+import java.util.Map;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
@@ -25,6 +27,8 @@ public class PlaceServiceFacade {
 
     public PlaceDto.SearchResult search(SearchType searchType, String keyword, Pageable pageable) {
         List<CompanyDto.Meta> companies = this.companyService.searchByKeyword(keyword, pageable);
+        Map<String, Station> stationNames = this.stationService.getByIds(companies.stream().map(CompanyDto.Meta::getNearestStation).toList());
+        companies.forEach(company -> company.setStationName(stationNames.get(company.getNearestStation()).getName()));
         if (searchType.equals(SearchType.COMPANY)) {
             return new SearchResult(companies);
         }
