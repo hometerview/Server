@@ -64,6 +64,7 @@ public class ReviewDto {
         @Size(min = 30, max = 900)
         private String disadvantage;
         private Price price;
+        private Floor floor;
     }
 
     @Getter

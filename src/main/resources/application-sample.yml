@@ -1,0 +1,30 @@
+spring:
+  data:
+    mongodb:
+      uri:
+  security:
+    oauth2:
+      client:
+        registration:
+          kakao:
+            client-id:
+            authorization-grant-type:
+            scope:
+            client-name:
+            client-authentication-method:
+            redirect-uri:
+
+jwt:
+  token:
+    secret-key:
+  access-token:
+    expire-length:
+  refresh-token:
+    expire-length:
+oauth2:
+  apple:
+    authUrl:
+    url:
+    teamId:
+    keyId:
+    clientId:
