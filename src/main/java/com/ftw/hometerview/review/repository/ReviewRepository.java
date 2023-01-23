@@ -11,6 +11,8 @@ public interface ReviewRepository extends MongoRepository<Review, String> {
 
     List<Review> getReviewByBuildingId(String buildingId, Pageable pageable);
 
+    List<Review> getReviewByCompanyId(String companyId, Pageable pageable);
+
     List<Review> getReviewByMemberId(String memberId, Pageable pageable);
 
 }

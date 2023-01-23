@@ -20,4 +20,9 @@ public class BuildingService {
         return response;
     }
 
+    public List<String> getBuildingsByCity(String city) {
+        List<Building> buildings = this.buildingRepository.findAllByCity(city);
+        return buildings.stream().map(Building::getId).toList();
+    }
+
 }
