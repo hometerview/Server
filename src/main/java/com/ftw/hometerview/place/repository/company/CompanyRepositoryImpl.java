@@ -1,6 +1,6 @@
 package com.ftw.hometerview.place.repository.company;
 
-import static com.ftw.hometerview.core.util.Constants.LOAD_NAME;
+import static com.ftw.hometerview.core.util.Constants.ROAD_ADDRESS;
 import static com.ftw.hometerview.core.util.Constants.NAME;
 import static com.ftw.hometerview.core.util.Constants.STATION;
 
@@ -21,7 +21,7 @@ public class CompanyRepositoryImpl implements CompanyRepositoryCustom {
     public List<Company> searchByKeyword(String keyword, Pageable pageable) {
         Criteria criteria = new Criteria().orOperator(
             Criteria.where(NAME).regex(keyword, "i"),
-            Criteria.where(LOAD_NAME).regex(keyword, "i"),
+            Criteria.where(ROAD_ADDRESS).regex(keyword, "i"),
             Criteria.where(STATION).regex(keyword, "i")
         );
 
@@ -29,8 +29,8 @@ public class CompanyRepositoryImpl implements CompanyRepositoryCustom {
     }
 
     @Override
-    public boolean existsByNameAndLoadName(String name, String loadName) {
-        Criteria criteria = Criteria.where(NAME).is(name).and(LOAD_NAME).is(loadName);
+    public boolean existsByNameAndRoadAddress(String name, String roadAddress) {
+        Criteria criteria = Criteria.where(NAME).is(name).and(ROAD_ADDRESS).is(roadAddress);
         return mongoTemplate.exists(Query.query(criteria), Company.class);
     }
 

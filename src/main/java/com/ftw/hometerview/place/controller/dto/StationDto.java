@@ -10,8 +10,12 @@ public class StationDto {
     public static class Meta {
 
         private String stationId;
+        private String lineNumber;
         private String name;
-        private String loadName;
+        private String lotNumberAddress;
+        private String roadAddress;
+        private Double lat;
+        private Double lon;
     }
 
 }

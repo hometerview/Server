@@ -17,7 +17,7 @@ public class CompanyService {
     private final CompanyRepository companyRepository;
 
     public void register(CompanyDto.RegisterCompany req) {
-        if (isDuplicated(req.getName(), req.getLoadName())) {
+        if (isDuplicated(req.getName(), req.getRoadAddress())) {
             throw new BadRequestException(ResponseType.DATA_DUPLICATED);
         }
         Company company = req.toCompany();
@@ -27,8 +27,8 @@ public class CompanyService {
         this.companyRepository.save(company);
     }
 
-    private boolean isDuplicated(String name, String loadName) {
-        return this.companyRepository.existsByNameAndLoadName(name, loadName);
+    private boolean isDuplicated(String name, String roadAddress) {
+        return this.companyRepository.existsByNameAndRoadAddress(name, roadAddress);
     }
 
     public List<CompanyDto.Meta> searchByKeyword(String keyword, Pageable pageable) {

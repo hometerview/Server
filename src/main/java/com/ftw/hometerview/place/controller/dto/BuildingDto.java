@@ -12,7 +12,7 @@ public class BuildingDto {
 
         private String buildingId;
         private String name;
-        private String loadName;
+        private String roadAddress;
     }
 
     @Getter
@@ -21,7 +21,7 @@ public class BuildingDto {
 
         private String buildingId;
         private String name;
-        private String loadName;
+        private String roadAddress;
         private ResidenceType residenceType;
         private Integer totalRating;
 

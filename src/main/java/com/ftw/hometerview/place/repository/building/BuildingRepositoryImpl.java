@@ -1,6 +1,6 @@
 package com.ftw.hometerview.place.repository.building;
 
-import static com.ftw.hometerview.core.util.Constants.LOAD_NAME;
+import static com.ftw.hometerview.core.util.Constants.ROAD_ADDRESS;
 import static com.ftw.hometerview.core.util.Constants.NAME;
 
 import com.ftw.hometerview.place.domain.Building;
@@ -20,7 +20,7 @@ public class BuildingRepositoryImpl implements BuildingRepositoryCustom {
     public List<Building> searchByKeyword(String keyword, Pageable pageable) {
         Criteria criteria = new Criteria().orOperator(
             Criteria.where(NAME).regex(keyword, "i"),
-            Criteria.where(LOAD_NAME).regex(keyword, "i")
+            Criteria.where(ROAD_ADDRESS).regex(keyword, "i")
         );
 
         return mongoTemplate.find(Query.query(criteria).with(pageable), Building.class);
