@@ -18,17 +18,23 @@ public class Station extends AbstractDocument {
 
     @MongoId(FieldType.OBJECT_ID)
     String id;
+    String lineNumber;
     String name;
-    String loadName;
+    String lotNumberAddress;
+    String roadAddress;
     Double lat;
     Double lon;
 
     public StationDto.Meta toMeta() {
         return StationDto.Meta.builder()
-            .stationId(this.id)
-            .name(this.name)
-            .loadName(this.loadName)
-            .build();
+                .stationId(this.id)
+                .lineNumber(this.lineNumber)
+                .name(this.name)
+                .lotNumberAddress(this.lotNumberAddress)
+                .roadAddress(this.roadAddress)
+                .lat(this.lat)
+                .lon(this.lon)
+                .build();
     }
 
 }

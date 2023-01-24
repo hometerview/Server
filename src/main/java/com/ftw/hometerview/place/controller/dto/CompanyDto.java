@@ -14,7 +14,7 @@ public class CompanyDto {
         @NotBlank
         private String name;
         @NotBlank
-        private String loadName;
+        private String roadAddress;
         @NotNull
         private Double lat;
         @NotNull
@@ -23,8 +23,8 @@ public class CompanyDto {
         public Company toCompany() {
             return Company.builder()
                 .name(this.name)
-                .loadName(this.loadName)     // oo시 oo구 oo동 ~~
-                .province(this.loadName.split(" ")[1])
+                .roadAddress(this.roadAddress)     // oo시 oo구 oo동 ~~
+                .province(this.roadAddress.split(" ")[1])
                 .lat(this.lat)
                 .lon(this.lon)
                 .build();
@@ -37,7 +37,7 @@ public class CompanyDto {
 
         private String companyId;
         private String name;
-        private String loadName;
+        private String roadAddress;
         private String nearestStation;
 
         public void setStationName(String stationName) {

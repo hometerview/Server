@@ -7,6 +7,6 @@ import org.springframework.data.domain.Pageable;
 public interface CompanyRepositoryCustom {
 
     List<Company> searchByKeyword(String keyword, Pageable pageable);
-    boolean existsByNameAndLoadName(String name, String loadName);
+    boolean existsByNameAndRoadAddress(String name, String roadAddress);
 
 }

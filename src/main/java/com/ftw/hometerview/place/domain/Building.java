@@ -22,7 +22,7 @@ public class Building extends AbstractDocument {
     String id;
 
     String name;
-    String loadName;
+    String roadAddress;
     String city;
     Double lat;
     Double lon;
@@ -39,7 +39,7 @@ public class Building extends AbstractDocument {
         return BuildingDto.Meta.builder()
             .buildingId(this.id)
             .name(this.name)
-            .loadName(this.loadName)
+            .roadAddress(this.roadAddress)
             .build();
     }
 }

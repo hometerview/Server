@@ -20,7 +20,7 @@ public class Company extends AbstractDocument {
     String id;
 
     String name;
-    String loadName;
+    String roadAddress;
     String province;
     String stationId;
     Double lat;
@@ -35,7 +35,7 @@ public class Company extends AbstractDocument {
         return CompanyDto.Meta.builder()
             .companyId(this.id)
             .name(this.name)
-            .loadName(this.loadName)
+            .roadAddress(this.roadAddress)
             .build();
     }
 
