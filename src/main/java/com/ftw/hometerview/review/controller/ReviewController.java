@@ -6,7 +6,7 @@ import static com.ftw.hometerview.core.util.Constants.DEFAULT_PAGE_SIZE;
 import com.ftw.hometerview.core.annotation.NonAuthorized;
 import com.ftw.hometerview.core.domain.ResponseEntity;
 import com.ftw.hometerview.review.controller.dto.ReviewDto;
-import com.ftw.hometerview.review.service.ReviewService;
+import com.ftw.hometerview.review.service.ReviewServiceFacade;
 import io.swagger.v3.oas.annotations.Operation;
 import java.util.List;
 import lombok.RequiredArgsConstructor;
@@ -28,16 +28,17 @@ import org.springframework.web.bind.annotation.RestController;
 @RestController
 public class ReviewController {
 
-    private final ReviewService reviewService;
+    private final ReviewServiceFacade reviewService;
 
     @Operation(summary = "홈 지역별 리뷰 리스트 조회")
     @NonAuthorized
     @GetMapping
     public ResponseEntity<List<ReviewDto.Meta>> getMainReviews(
-        @RequestParam(required = false, defaultValue = DEFAULT_KEYWORD) String buildingId,
+        // 사용처를 명확히 하고 required 조정 필요. 현재 홈화면 용으로 구현되어서 required임
+        @RequestParam(required = false, defaultValue = DEFAULT_KEYWORD) String companyId,
         @RequestParam(required = false, defaultValue = DEFAULT_KEYWORD) String cityId,
         @PageableDefault(size = DEFAULT_PAGE_SIZE) Pageable pageable) {
-        var reviewList = this.reviewService.getHomeReviewList(buildingId, cityId, pageable);
+        var reviewList = this.reviewService.getHomeReviewList(companyId, cityId, pageable);
         return ResponseEntity.successResponse(reviewList);
     }
 

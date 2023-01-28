@@ -1,6 +1,5 @@
 package com.ftw.hometerview.core.domain;
 
-import com.ftw.hometerview.core.util.Constants;
 import lombok.Getter;
 import lombok.RequiredArgsConstructor;
 
