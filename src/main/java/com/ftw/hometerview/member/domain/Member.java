@@ -19,7 +19,7 @@ public class Member extends AbstractDocument {
     @MongoId(FieldType.OBJECT_ID)
     String id;
 
-    String memberId;
+    String oauthId;
 
     String nickname;
 
