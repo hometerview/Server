@@ -5,6 +5,8 @@ import com.ftw.hometerview.core.exception.BadRequestException;
 import com.ftw.hometerview.place.controller.dto.CompanyDto;
 import com.ftw.hometerview.place.domain.Company;
 import com.ftw.hometerview.place.repository.company.CompanyRepository;
+import com.ftw.hometerview.place.util.NaverMapGeocodeAPI;
+import com.ftw.hometerview.place.util.NaverMapGeocodeAPI.GeoPoint;
 import java.util.List;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Pageable;
@@ -15,12 +17,16 @@ import org.springframework.stereotype.Service;
 public class CompanyService {
 
     private final CompanyRepository companyRepository;
+    private final NaverMapGeocodeAPI naverMapGeocodeAPI;
 
     public void register(CompanyDto.RegisterCompany req) {
         if (isDuplicated(req.getName(), req.getRoadAddress())) {
             throw new BadRequestException(ResponseType.DATA_DUPLICATED);
         }
-        Company company = req.toCompany();
+
+        GeoPoint geoPoint = naverMapGeocodeAPI.convert(req.getRoadAddress());
+
+        Company company = req.toCompany(geoPoint);
         // TODO: get nearliest station from naver API
         // TODO: get station id from db
         company.setNearliestStation("");
