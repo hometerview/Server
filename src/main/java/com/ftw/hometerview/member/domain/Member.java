@@ -27,9 +27,12 @@ public class Member extends AbstractDocument {
 
     Certification certification;
 
+    String companyId;
+
     String refreshToken;
 
-    private class Certification {
+    public static class Certification {
+
         String locationCode;    // 지역 코드
         Boolean isPostedReview;   // 리뷰를 작성했는지에 대한 여부
     }

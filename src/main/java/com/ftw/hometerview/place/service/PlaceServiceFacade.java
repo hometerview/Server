@@ -39,4 +39,12 @@ public class PlaceServiceFacade {
         // TODO:: Async 처리 적용 가능 여부(메서드 분리 필요 확인)
     }
 
+    public PlaceDto.CompanyDetail getCompanyDetail(String companyId) {
+        Company company = this.companyService.getCompanyById(companyId);
+        Station station = this.stationService.getByIds(List.of(company.getStationId()))
+            .getOrDefault(company.getStationId(), new Station());
+        return new CompanyDetail(company, station);
+
+    }
+
 }
