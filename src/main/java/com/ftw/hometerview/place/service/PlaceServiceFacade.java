@@ -42,7 +42,7 @@ public class PlaceServiceFacade {
     public PlaceDto.CompanyDetail getCompanyDetail(String companyId) {
         Company company = this.companyService.getCompanyById(companyId);
         Station station = this.stationService.getByIds(List.of(company.getStationId()))
-            .getOrDefault(company.getStationId(), new Station());
+            .getOrDefault(company.getStationId(), Station.EMPTY);
         return new CompanyDetail(company, station);
 
     }

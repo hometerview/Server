@@ -32,7 +32,7 @@ public class AuthService {
             case EXPIRED -> throw new UnauthorizedException(ResponseType.AUTH_REQUIRE_LOGIN);
         }
 
-        Member member = memberRepository.findByMemberId(memberId).orElseThrow(
+        Member member = memberRepository.findByOauthId(memberId).orElseThrow(
             () -> new NotFoundException(ResponseType.MEMBER_NOT_EXIST_ID)
         );
 
