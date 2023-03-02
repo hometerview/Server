@@ -39,15 +39,15 @@ public class OAuthKakaoServiceImpl implements OAuthService {
     public LoginResponse login(LoginRequest loginRequest) {
         // Get user information using Kakao Token
         Map<String, Object> kakaoAttributes = getMemberInfoByToken(loginRequest);
-        String memberId = String.valueOf(kakaoAttributes.get("id"));
+        String oauthId = String.valueOf(kakaoAttributes.get("id"));
         Map<String, Object> properties = (Map<String, Object>) kakaoAttributes.get("properties");
         String nickname = String.valueOf(properties.get("nickname"));
 
-        String accessToken = jwtTokenProvider.createAccessToken(memberId);
+        String accessToken = jwtTokenProvider.createAccessToken(oauthId);
         String refreshToken = jwtTokenProvider.createRefreshToken();
 
-        // Check if requester are subscribed to the server through requester member ID
-        Optional<Member> member = memberRepository.findByMemberId(memberId);
+        // Check if requester are subscribed to the server through requester member oauth ID
+        Optional<Member> member = memberRepository.findByOauthId(oauthId);
         if (member.isPresent()) {
             ProviderType providerType = member.get().getProviderType();
 
@@ -58,7 +58,7 @@ public class OAuthKakaoServiceImpl implements OAuthService {
             memberRepository.save(member.get());
         } else {
             memberRepository.save(Member.builder()
-                .memberId(memberId)
+                .oauthId(oauthId)
                 .providerType(ProviderType.KAKAO)
                 .refreshToken(refreshToken)
                 .nickname(nickname)

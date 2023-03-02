@@ -37,4 +37,9 @@ public class CompanyService {
         return response;
     }
 
+    public Company getCompanyById(String companyId) {
+        return this.companyRepository.findById(companyId)
+            .orElseThrow(() -> new BadRequestException(ResponseType.REQUEST_NOT_VALID));
+    }
+
 }

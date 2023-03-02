@@ -3,8 +3,10 @@ package com.ftw.hometerview.place.service;
 import com.ftw.hometerview.place.controller.dto.CompanyDto;
 import com.ftw.hometerview.place.controller.dto.PlaceDto;
 import com.ftw.hometerview.place.controller.dto.BuildingDto;
+import com.ftw.hometerview.place.controller.dto.PlaceDto.CompanyDetail;
 import com.ftw.hometerview.place.controller.dto.PlaceDto.SearchResult;
 import com.ftw.hometerview.place.controller.dto.StationDto;
+import com.ftw.hometerview.place.domain.Company;
 import com.ftw.hometerview.place.domain.SearchType;
 import com.ftw.hometerview.place.domain.Station;
 import java.util.List;
@@ -37,6 +39,14 @@ public class PlaceServiceFacade {
         return SearchResult.builder().companies(companies).buildings(buildings).stations(stations)
             .build();
         // TODO:: Async 처리 적용 가능 여부(메서드 분리 필요 확인)
+    }
+
+    public PlaceDto.CompanyDetail getCompanyDetail(String companyId) {
+        Company company = this.companyService.getCompanyById(companyId);
+        Station station = this.stationService.getByIds(List.of(company.getStationId()))
+            .getOrDefault(company.getStationId(), Station.EMPTY);
+        return new CompanyDetail(company, station);
+
     }
 
 }
