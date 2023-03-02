@@ -37,4 +37,5 @@ public class Station extends AbstractDocument {
                 .build();
     }
 
+    public static Station EMPTY = Station.builder().build();
 }
